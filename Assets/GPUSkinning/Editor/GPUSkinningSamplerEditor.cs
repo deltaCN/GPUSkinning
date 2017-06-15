@@ -966,7 +966,7 @@ public class GPUSkinningSamplerEditor : Editor
                 EditorGUILayout.BeginHorizontal();
                 {
                     EditorGUI.BeginChangeCheck();
-                    EditorGUILayout.ObjectField(serializedObject.FindProperty("lodMeshes.Array.data[" + i + "]"), new GUIContent("LOD" + (i + 1)));
+					EditorGUILayout.PropertyField(serializedObject.FindProperty("lodMeshes.Array.data[" + i + "]"), new GUIContent("LOD" + (i + 1)));
                     if (EditorGUI.EndChangeCheck())
                     {
                         ApplySamplerModification(sampler);
