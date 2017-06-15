@@ -440,7 +440,7 @@ public class GPUSkinningPlayer
                 lastPlayedClip, GetCrossFadeFrameIndex(), crossFadeTime, crossFadeProgress
             );
             mr.SetPropertyBlock(mpb);
-            UpdateJoints(frame);
+			UpdateJoints(frame, frame_crossFade, blend_crossFade);
         }
 
         if (playingClip.rootMotionEnabled && rootMotionEnabled && frameIndex != rootMotionFrameIndex)
@@ -580,7 +580,7 @@ public class GPUSkinningPlayer
         return (int)(time * clip.fps) % (int)(clip.length * clip.fps);
     }
 
-    private void UpdateJoints(GPUSkinningFrame frame)
+	private void UpdateJoints(GPUSkinningFrame frame, GPUSkinningFrame lastFrame, float blendFade)
     {
         if(joints == null)
         {
@@ -596,19 +596,16 @@ public class GPUSkinningPlayer
             Transform jointTransform = Application.isPlaying ? joint.Transform : joint.transform;
             if (jointTransform != null)
             {
-                // TODO: Update Joint when Animation Blend
-
-                Matrix4x4 jointMatrix = frame.matrices[joint.BoneIndex] * bones[joint.BoneIndex].BindposeInv;
-                if(playingClip.rootMotionEnabled && rootMotionEnabled)
-                {
-                    jointMatrix = frame.RootMotionInv(res.anim.rootBoneIndex) * jointMatrix;
-                }
-
-                jointTransform.localPosition = jointMatrix.MultiplyPoint(Vector3.zero);
-
-                Vector3 jointDir = jointMatrix.MultiplyVector(Vector3.right);
-                Quaternion jointRotation = Quaternion.FromToRotation(Vector3.right, jointDir);
-                jointTransform.localRotation = jointRotation;
+				Vector3 localPosition;
+				Quaternion jointRotation;
+				GetFrameTrans(frame, bones, joint, out localPosition, out jointRotation);
+				if (lastFrame != null) {
+					Vector3 lastLocalPosition;
+					Quaternion lastJointRotation;
+					GetFrameTrans(lastFrame, bones, joint, out lastLocalPosition, out lastJointRotation);
+					jointRotation = Quaternion.Lerp (lastJointRotation, jointRotation, blendFade);
+					localPosition = Vector3.Lerp (lastLocalPosition, localPosition, blendFade);
+				}
             }
             else
             {
@@ -618,7 +615,18 @@ public class GPUSkinningPlayer
             }
         }
     }
+	private void GetFrameTrans(GPUSkinningFrame frame, GPUSkinningBone[] bones, GPUSkinningPlayerJoint joint, out Vector3 localPosition, out Quaternion jointRotation)
+	{
+		Matrix4x4 jointMatrix = frame.matrices[joint.BoneIndex] * bones[joint.BoneIndex].BindposeInv;
+		if(playingClip.rootMotionEnabled && rootMotionEnabled)
+		{
+			jointMatrix = frame.RootMotionInv(res.anim.rootBoneIndex) * jointMatrix;
+		}
 
+		localPosition = jointMatrix.MultiplyPoint(Vector3.zero);
+		Vector3 jointDir = jointMatrix.MultiplyVector(Vector3.right);
+		jointRotation = Quaternion.FromToRotation(Vector3.right, jointDir);
+	}
     private void ConstructJoints()
     {
         if (joints == null)
