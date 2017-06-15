@@ -418,7 +418,10 @@ public class GPUSkinningSampler : MonoBehaviour
 			weights[2] = new BoneWeightSortData(){ index=boneWeight.boneIndex2, weight=boneWeight.weight2 };
 			weights[3] = new BoneWeightSortData(){ index=boneWeight.boneIndex3, weight=boneWeight.weight3 };
 			System.Array.Sort(weights);
-
+			if (skinQuality == GPUSkinningQuality.Bone1)
+				weights [0].weight = 1f;
+			else if (skinQuality == GPUSkinningQuality.Bone2)
+				weights [1].weight = 1f - weights [0].weight;
 			GPUSkinningBone bone0 = GetBoneByTransform(smrBones[weights[0].index]);
 			GPUSkinningBone bone1 = GetBoneByTransform(smrBones[weights[1].index]);
 			GPUSkinningBone bone2 = GetBoneByTransform(smrBones[weights[2].index]);
