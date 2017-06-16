@@ -542,6 +542,8 @@ public class GPUSkinningSampler : MonoBehaviour
             fileStream.Close();
             fileStream.Dispose();
         }
+		var pngBytes = texture.EncodeToPNG();
+		File.WriteAllBytes(dir + "/GPUSKinning_Texture_" + animName + ".png", pngBytes);
         WriteTempData(TEMP_SAVED_TEXTURE_PATH, savedPath);
     }
 
@@ -557,7 +559,10 @@ public class GPUSkinningSampler : MonoBehaviour
             texHeight *= 2;
         }
     }
-
+	public void CreateSkinBonesAssets()
+	{
+		
+	}
     public void MappingAnimationClips()
     {
         if(animation == null)

@@ -4,7 +4,6 @@ using UnityEditor.SceneManagement;
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
-
 [CustomEditor(typeof(GPUSkinningSampler))]
 public class GPUSkinningSamplerEditor : Editor 
 {
@@ -1134,6 +1133,15 @@ public class GPUSkinningSamplerEditor : Editor
         EditorGUILayout.Space();
     }
 
+	private void OnGUI_OutPutSkinTable(GPUSkinningSampler sampler)
+	{
+		EditorGUILayout.Space ();
+		EditorGUILayout.BeginHorizontal ();
+		if (GUILayout.Button ("OutSkinBoneAssets")) 
+			sampler.CreateSkinBonesAssets ();		
+		EditorGUILayout.EndHorizontal ();
+		EditorGUILayout.Space ();
+	}
     private void PreviewInteraction_CameraRestriction()
     {
         if(preview == null)
