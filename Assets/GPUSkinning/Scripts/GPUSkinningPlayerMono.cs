@@ -72,12 +72,13 @@ public class GPUSkinningPlayerMono : MonoBehaviour
         if (anim != null && mesh != null && mtrl != null && textureRawData != null)
         {
             GPUSkinningPlayerResources res = null;
-
-            if (Application.isPlaying)
+			#if UNITY_5_5 || UNITY_5_6
+			if (Application.isPlaying && SystemInfo.supportsInstancing)
             {
                 playerManager.Register(anim, mesh, mtrl, textureRawData, this, out res);
             }
             else
+			#endif
             {
                 res = new GPUSkinningPlayerResources();
                 res.anim = anim;
