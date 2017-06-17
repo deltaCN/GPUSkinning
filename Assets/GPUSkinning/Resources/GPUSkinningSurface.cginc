@@ -1,6 +1,11 @@
 ﻿#ifndef GPUSKINNING_SURFACE
 #define GPUSKINNING_SURFACE
 
+//兼容Unity5.4
+#ifndef UNITY_VERTEX_INPUT_INSTANCE_ID
+#define UNITY_VERTEX_INPUT_INSTANCE_ID  UNITY_INSTANCE_ID
+#endif
+
 #include "UnityStandardInput.cginc"
  
 // just for NormalizePerPixelNormal()

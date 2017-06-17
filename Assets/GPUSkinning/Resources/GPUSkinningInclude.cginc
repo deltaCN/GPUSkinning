@@ -1,6 +1,11 @@
 ﻿#ifndef GPUSKINNING_INCLUDE
 #define GPUSKINNING_INCLUDE
 
+//兼容Unity5.4
+#ifndef UNITY_VERTEX_INPUT_INSTANCE_ID
+#define UNITY_VERTEX_INPUT_INSTANCE_ID  UNITY_INSTANCE_ID
+#endif
+
 uniform sampler2D _GPUSkinning_TextureMatrix;
 uniform float3 _GPUSkinning_TextureSize_NumPixelsPerFrame;
 
