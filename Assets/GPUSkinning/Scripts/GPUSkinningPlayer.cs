@@ -606,6 +606,8 @@ public class GPUSkinningPlayer
 					jointRotation = Quaternion.Lerp (lastJointRotation, jointRotation, blendFade);
 					localPosition = Vector3.Lerp (lastLocalPosition, localPosition, blendFade);
 				}
+                jointTransform.localRotation = jointRotation;
+                jointTransform.localPosition = localPosition;
             }
             else
             {
@@ -622,8 +624,7 @@ public class GPUSkinningPlayer
 		{
 			jointMatrix = frame.RootMotionInv(res.anim.rootBoneIndex) * jointMatrix;
 		}
-
-		localPosition = jointMatrix.MultiplyPoint(Vector3.zero);
+		localPosition = jointMatrix.MultiplyPoint3x4(Vector3.zero);
 		Vector3 jointDir = jointMatrix.MultiplyVector(Vector3.right);
 		jointRotation = Quaternion.FromToRotation(Vector3.right, jointDir);
 	}

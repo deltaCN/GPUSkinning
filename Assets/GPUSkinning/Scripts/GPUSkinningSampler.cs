@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
@@ -542,8 +543,17 @@ public class GPUSkinningSampler : MonoBehaviour
             fileStream.Close();
             fileStream.Dispose();
         }
-		var pngBytes = texture.EncodeToPNG();
-		File.WriteAllBytes(dir + "/GPUSKinning_Texture_" + animName + ".png", pngBytes);
+        //{
+        //    var pngBytes = texture.EncodeToPNG();
+        //    var texPath = dir + "/GPUSKinning_Texture_" + animName + ".png";
+        //    File.WriteAllBytes(texPath, pngBytes);
+        //    AssetDatabase.ImportAsset(texPath);
+        //    var texImporter = AssetImporter.GetAtPath(Path.ChangeExtension(texPath, String.Empty)) as TextureImporter;
+        //    if (texImporter != null)
+        //    {
+        //        texImporter.textureFormat = TextureImporterFormat.RGBA32;
+        //    }
+        //}
         WriteTempData(TEMP_SAVED_TEXTURE_PATH, savedPath);
     }
 
